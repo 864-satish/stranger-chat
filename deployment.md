@@ -34,7 +34,93 @@ This guide provides a complete free deployment plan for the Stranger Chat applic
 - **Backend**: Render, Fly.io (free server hosting)
 - **Note**: Railway will automatically run the build commands for each service
 
-## 2. Backend Deployment (stranger-chat-service)
+## Deployment Options
+
+### Option 1: Single Railway Project (Recommended for Simplicity)
+Deploy both frontend and backend as **separate services within one Railway project**:
+
+**Advantages:**
+- Single project to manage
+- Services can communicate internally
+- Shared environment and monitoring
+- Easier domain configuration
+- Cost-effective (one project instead of two)
+
+**How it works:**
+- Railway creates two services in one project
+- Backend runs as a server service
+- Frontend runs as a static site service
+- Services communicate via Railway's internal networking
+
+### Option 2: Separate Railway Projects
+Deploy frontend and backend as **separate Railway projects** from their respective folders:
+
+**Advantages:**
+- Complete isolation between services
+- Independent scaling and resource allocation
+- Separate monitoring and logs
+- More granular control
+
+**Disadvantages:**
+- Managing two separate projects
+- More complex domain setup
+- Higher management overhead
+
+### Option 3: Monorepo Root Deployment
+Deploy from the root directory using workspace configuration.
+
+**Note:** Requires additional Railway configuration for workspace handling.
+
+## 2. Single Railway Project Deployment (Recommended)
+
+### Step 1: Create Railway Project
+1. Log into Railway (https://railway.app)
+2. Click "New Project" → "Deploy from GitHub"
+3. Connect your GitHub account and select the stranger-chat repository
+4. **Important**: Do NOT select a specific folder - deploy from the root directory
+5. Railway will detect this as a monorepo project
+
+### Step 2: Configure Services
+Railway will automatically detect both services. You should see:
+
+**Service 1: stranger-chat-service (Backend)**
+- Railway will auto-detect Node.js
+- Build Command: `npm run build` (from workspace)
+- Start Command: `node dist/main.js`
+- Root Directory: `stranger-chat-service`
+
+**Service 2: stranger-chat-web (Frontend)**
+- Railway will auto-detect as static site
+- Build Command: `npm run build` (from workspace)
+- Publish Directory: `dist`
+- Root Directory: `stranger-chat-web`
+
+### Step 3: Environment Variables
+
+**Backend Service Environment Variables:**
+```bash
+NODE_ENV=production
+PORT=8080
+```
+
+**Frontend Service Environment Variables:**
+```bash
+VITE_SOCKET_URL=https://stranger-chat-service.railway.internal
+```
+
+**Important**: Use Railway's internal networking URL for service-to-service communication.
+
+### Step 4: Verify Deployment
+- Check that both services deploy successfully
+- Note the generated URLs:
+  - Backend: `https://stranger-chat-service.up.railway.app/`
+  - Frontend: `https://stranger-chat-web.up.railway.app/`
+
+### Step 5: Test Internal Communication
+- Update frontend environment variable to use the backend's Railway internal URL
+- Test WebSocket connection between services
+
+## 3. Backend Deployment (stranger-chat-service)
 
 ### Step 1: Deploy to Railway
 1. Log into Railway (https://railway.app)
@@ -62,7 +148,7 @@ PORT=8080
 - Note the generated URL: `https://your-backend-name.up.railway.app`
 - Test WebSocket endpoint: Should accept connections on port 8080
 
-## 3. Frontend Deployment (stranger-chat-web)
+## 4. Frontend Deployment (stranger-chat-web)
 
 ### Step 1: Deploy to Railway
 1. In the same Railway account, click "New Project" → "Deploy from GitHub"
@@ -90,7 +176,7 @@ VITE_SOCKET_URL=https://your-backend-name.up.railway.app
 - Note the generated URL: `https://your-frontend-name.up.railway.app`
 - Test basic page load and age verification modal
 
-## 4. Domain Configuration (GoDaddy)
+## 5. Domain Configuration (GoDaddy)
 
 ### Step 1: Access DNS Settings
 1. Log into GoDaddy (https://www.godaddy.com)
@@ -133,7 +219,7 @@ For both frontend and backend (if needed):
 - Test on mobile devices
 - Verify theme toggle and responsive design
 
-## 5. Scaling Considerations
+## 6. Scaling Considerations
 
 ### Free Tier Limits
 - **Hours**: 100 hours/month (~3 hours/day)
@@ -150,7 +236,7 @@ For both frontend and backend (if needed):
 - **Backend**: Requires Pro plan for multiple pods
 - **WebSocket**: Sticky sessions needed for chat persistence
 
-## 6. Monitoring & Troubleshooting
+## 7. Monitoring & Troubleshooting
 
 ### Railway Dashboard
 - **Logs**: Real-time application logs
@@ -162,7 +248,7 @@ For both frontend and backend (if needed):
 - **Build Failures**: Ensure all dependencies are in package.json
 - **Domain Propagation**: DNS changes take 24-48 hours
 
-## 7. Backup & Maintenance
+## 8. Backup & Maintenance
 
 ### Code Backup
 - All code safely stored in GitHub
@@ -187,7 +273,7 @@ For both frontend and backend (if needed):
 - **Overage**: $0.0004/hour beyond free limit
 - **Pro Plan**: $5/month for higher limits
 
-## 10. Post-Deployment Tasks
+## 9. Post-Deployment Tasks
 
 ### Performance Optimization
 - Enable Railway's CDN for faster global loading
@@ -209,7 +295,7 @@ For both frontend and backend (if needed):
 - Create FAQ section
 - Monitor user feedback
 
-## 11. Emergency Procedures
+## 10. Emergency Procedures
 
 ### Rollback
 1. In Railway dashboard, go to "Deployments"
@@ -243,7 +329,7 @@ For both frontend and backend (if needed):
 - [ ] Terms of Use accessible
 - [ ] Age verification working
 
-## 13. Security Considerations
+## 12. Security Considerations
 
 ### SSL/TLS
 - Railway provides automatic SSL certificates
@@ -265,7 +351,7 @@ For both frontend and backend (if needed):
 - Consider Cloudflare for additional security
 - Monitor traffic patterns
 
-## 14. Performance Optimization
+## 13. Performance Optimization
 
 ### Frontend Optimization
 - Vite build provides optimized bundles
@@ -282,7 +368,7 @@ For both frontend and backend (if needed):
 - Railway provides global CDN for static sites
 - Reduces latency for users worldwide
 
-## 15. Analytics & Monitoring
+## 14. Analytics & Monitoring
 
 ### Railway Built-in Tools
 - **Metrics Dashboard**: CPU, memory, response times
@@ -300,7 +386,7 @@ For both frontend and backend (if needed):
 - Error rates and response times
 - User engagement metrics
 
-## 16. Cost Management
+## 15. Cost Management
 
 ### Railway Free Tier
 - 512MB RAM, 1GB disk
@@ -317,7 +403,7 @@ For both frontend and backend (if needed):
 - Scale down during low-traffic periods
 - Optimize code to reduce resource usage
 
-## 17. Future Enhancements
+## 16. Future Enhancements
 
 ### Planned Features
 - User profiles and avatars
@@ -337,7 +423,7 @@ For both frontend and backend (if needed):
 - Chat history and search
 - Admin moderation tools
 
-## 18. Troubleshooting Guide
+## 17. Troubleshooting Guide
 
 ### Common Deployment Issues
 
@@ -373,7 +459,7 @@ For both frontend and backend (if needed):
 - Verify age verification modal works
 - Ensure terms of use are accessible
 
-## 19. Support & Resources
+## 18. Support & Resources
 
 ### Railway Support
 - **Documentation**: railway.app/docs

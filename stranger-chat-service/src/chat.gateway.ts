@@ -17,14 +17,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private waitingUsers: Socket[] = [];
   private activeChats: Map<string, string> = new Map(); // socketId to partner socketId
   private usernames: Map<string, string> = new Map(); // socketId to username
+  private connectedUsers: number = 0;
 
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
+    this.connectedUsers++;
+    this.emitUserCount();
     // Wait for join message to get username
   }
 
   handleDisconnect(client: Socket) {
     console.log(`Client disconnected: ${client.id}`);
+    this.connectedUsers--;
+    this.emitUserCount();
     this.removeFromWaiting(client);
     this.disconnectChat(client);
     this.usernames.delete(client.id);
@@ -80,5 +85,9 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         partner.emit('message', { text: data, senderUsername });
       }
     }
+  }
+
+  private emitUserCount() {
+    this.server.emit('userCount', { count: this.connectedUsers });
   }
 }

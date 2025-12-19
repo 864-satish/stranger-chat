@@ -2,6 +2,7 @@
   <header>
     <div class="slogan">Chat with random strangers anonymously</div>
     <h1>Stranger Chat</h1>
+    <div class="user-count" v-if="userCount > 0">{{ userCount }} online</div>
     <button @click="$emit('toggle-theme')" class="theme-toggle">{{ isDark ? '☀️' : '🌙' }}</button>
   </header>
 </template>
@@ -10,7 +11,11 @@
 export default {
   name: 'Header',
   props: {
-    isDark: Boolean
+    isDark: Boolean,
+    userCount: {
+      type: Number,
+      default: 0
+    }
   },
   emits: ['toggle-theme']
 }
@@ -35,6 +40,17 @@ header {
 h1 {
   margin: 0;
   font-size: 1.5rem;
+}
+
+.user-count {
+  font-size: 0.8rem;
+  color: #4CAF50;
+  font-weight: bold;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(76, 175, 80, 0.1);
+  border-radius: 0.25rem;
+  border: 1px solid rgba(76, 175, 80, 0.2);
 }
 
 .theme-toggle {

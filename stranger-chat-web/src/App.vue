@@ -1,6 +1,6 @@
 <template>
   <div id="app" :class="theme">
-    <Header :is-dark="theme === 'dark'" @toggle-theme="toggleTheme" />
+    <Header :is-dark="theme === 'dark'" :user-count="userCount" @toggle-theme="toggleTheme" />
     <div class="layout">
       <AdSpace v-if="!isMobile" class="left-ad">Ad Space</AdSpace>
       <main class="chat-container">
@@ -43,6 +43,7 @@ export default {
     const isMobile = ref(window.innerWidth < 768)
     const showModal = ref(false)
     const pendingUsername = ref('')
+    const userCount = ref(0)
     let messageId = 0
 
     window.addEventListener('resize', () => {
@@ -96,6 +97,9 @@ export default {
         connected.value = false
         partnerUsername.value = ''
       })
+      socket.value.on('userCount', (data) => {
+        userCount.value = data.count
+      })
     }
 
     const skipChat = () => {
@@ -128,6 +132,7 @@ export default {
       partnerUsername,
       isMobile,
       showModal,
+      userCount,
       toggleTheme,
       handleConnect,
       doConnect,

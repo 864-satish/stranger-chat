@@ -7,8 +7,31 @@ https://strangerchat.co.in/
 
 ## Project Structure
 
+This is a **monorepo** containing two main applications:
+
 - **stranger-chat-web/**: Frontend application built with Vue.js
 - **stranger-chat-service/**: Backend service built with NestJS and TypeScript
+
+**Root package.json**: Provides workspace commands for development and building both services.
+
+## Workspace Commands
+
+From the root directory, you can run:
+
+```bash
+# Install all dependencies
+npm run install:all
+
+# Build both services
+npm run build
+
+# Start both services in development mode
+npm run dev
+
+# Deploy individual services
+npm run deploy:frontend  # Build and preview frontend
+npm run deploy:backend   # Build and start backend
+```
 
 ## Frontend (stranger-chat-web)
 
@@ -20,6 +43,7 @@ The frontend is a Vue.js application with a modern, responsive UI appealing to y
 - Username input with styled background
 - Real-time chat with partner usernames displayed
 - Mobile-friendly chat interface
+- **Live user count display** showing number of online users
 
 ### Features
 - **Age Verification**: Must accept Terms of Use and confirm 18+ before connecting
@@ -56,6 +80,7 @@ The backend is a WebSocket chat server written in NestJS with TypeScript. Its ma
 - Create WebSocket connections
 - Randomly pair two users for chatting
 - Facilitate message exchange between paired users
+- **Track and broadcast live user count** to all connected clients
 
 ### Tech Stack
 - NestJS
@@ -82,5 +107,24 @@ The server runs on port 8080.
 
 ## Deployment
 
-The Vue.js frontend is simple to host on static hosting services.
-The NestJS backend can be deployed on cloud platforms supporting Node.js.
+This application can be deployed to Railway in multiple ways:
+
+### Option 1: Single Railway Project (Recommended)
+Deploy both frontend and backend as services within one Railway project:
+- Deploy from the root directory
+- Railway automatically detects both services
+- Services communicate via Railway's internal networking
+- Use `VITE_SOCKET_URL=https://stranger-chat-service.railway.internal` for frontend
+
+### Option 2: Separate Railway Projects
+Deploy frontend and backend as separate Railway projects:
+- Backend: Deploy from `stranger-chat-service/` folder
+- Frontend: Deploy from `stranger-chat-web/` folder
+- More isolation but requires managing two projects
+
+### Option 3: Manual Deployment
+Deploy to any hosting platform that supports:
+- **Frontend**: Static site hosting (Netlify, Vercel, etc.)
+- **Backend**: Node.js hosting (Railway, Render, etc.)
+
+See `deployment.md` for detailed Railway deployment instructions.

@@ -1,0 +1,20 @@
+{
+  "name": "stranger-chat-monorepo",
+  "version": "1.0.0",
+  "description": "Stranger Chat Application - Frontend and Backend",
+  "private": true,
+  "workspaces": [
+    "stranger-chat-web",
+    "stranger-chat-service"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspace=stranger-chat-web & npm run dev --workspace=stranger-chat-service",
+    "install:all": "npm install",
+    "deploy:frontend": "npm run deploy --workspace=stranger-chat-web",
+    "deploy:backend": "npm run deploy --workspace=stranger-chat-service"
+  },
+  "keywords": ["chat", "websocket", "vue", "nestjs", "monorepo"],
+  "author": "",
+  "license": "ISC"
+}
