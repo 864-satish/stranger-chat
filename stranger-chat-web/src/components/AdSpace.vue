@@ -19,7 +19,7 @@ export default {
   justify-content: center;
   font-size: 1.2rem;
   color: #888;
-  background-image: url('/ad-placeholder.jpg');
+  background-image: url('/chat-background.svg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -43,6 +43,13 @@ VITE_SOCKET_URL=http://localhost:8080
 
 For production deployment, update `VITE_SOCKET_URL` to your deployed backend URL (e.g., `https://strangerchat.co.in/`).
 
+### Getting Started
+1. Navigate to `stranger-chat-web/`
+2. Install dependencies: `npm install`
+3. Start development server: `npm run dev`
+
+**Deploy Command**: `npm run deploy` - Builds and starts a local preview server (port 4173)
+
 ## Backend (stranger-chat-service)
 
 The backend is a WebSocket chat server written in NestJS with TypeScript. Its main job is to:
@@ -61,6 +68,7 @@ The backend is a WebSocket chat server written in NestJS with TypeScript. Its ma
 3. Build the project: `npm run build`
 4. Start the server: `npm start`
 
+**Deploy Command**: `npm run deploy` - Builds and starts the production server  
 The server runs on port 8080.
 
 ## How It Works
